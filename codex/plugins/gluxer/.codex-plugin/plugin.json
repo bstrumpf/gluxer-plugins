@@ -1,0 +1,27 @@
+{
+  "name": "gluxer",
+  "version": "0.1.0",
+  "description": "Bring Gluxer product discovery, visual review, and approval gates into Codex.",
+  "author": {
+    "name": "Gluxer"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Gluxer",
+    "shortDescription": "Product understanding inside Codex.",
+    "longDescription": "Gluxer brings product discovery, product-map and wireframe generation contracts, visual review, verified feedback, and explicit approval gates into Codex before implementation.",
+    "developerName": "Gluxer",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Glux, help me figure out this product.",
+      "Use Gluxer to resume this product from its canonical next action.",
+      "Open the current Gluxer section for visual review."
+    ],
+    "brandColor": "#FF4F40"
+  }
+}

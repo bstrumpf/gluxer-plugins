@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "gluxer": {
+      "type": "http",
+      "url": "${GLUXER_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${GLUXER_PAT}"
+      }
+    }
+  }
+}

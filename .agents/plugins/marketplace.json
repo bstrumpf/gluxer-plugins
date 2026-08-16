@@ -1,0 +1,21 @@
+{
+  "name": "gluxer",
+  "interface": {
+    "displayName": "Gluxer",
+    "description": "Installable Gluxer product-brain packages for Codex."
+  },
+  "plugins": [
+    {
+      "name": "gluxer",
+      "source": {
+        "source": "local",
+        "path": "./codex/plugins/gluxer"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

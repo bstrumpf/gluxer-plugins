@@ -1,0 +1,24 @@
+{
+  "name": "gluxer",
+  "owner": {
+    "name": "Gluxer"
+  },
+  "description": "Installable Gluxer product-brain packages for Claude Code.",
+  "metadata": {
+    "description": "Installable Gluxer product-brain packages for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "gluxer",
+      "source": "./claude-code/plugins/gluxer",
+      "description": "Bring Gluxer product discovery, visual review, and approval gates into Claude Code.",
+      "version": "0.1.0",
+      "category": "Productivity",
+      "tags": [
+        "product",
+        "discovery",
+        "mcp"
+      ]
+    }
+  ]
+}

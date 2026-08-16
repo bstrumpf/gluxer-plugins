@@ -1,0 +1,11 @@
+{
+  "name": "gluxer",
+  "description": "Bring Gluxer product discovery, visual review, and approval gates into Claude Code.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Gluxer"
+  },
+  "homepage": "https://github.com/bstrumpf/gluxer-plugins",
+  "repository": "https://github.com/bstrumpf/gluxer-plugins",
+  "license": "UNLICENSED"
+}

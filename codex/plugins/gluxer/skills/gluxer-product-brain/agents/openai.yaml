@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gluxer Product Brain"
+  short_description: "Product discovery, visual review, and approval in Codex"
+  default_prompt: "Use $gluxer-product-brain to shape this product with Gluxer before implementation."
