@@ -2,7 +2,7 @@
 
 I’m Glux. Your coding agent understands the code; I help it understand the product before it builds.
 
-This is the thin-client v0.1.3 marketplace for Claude Code and Codex. Create a PAT on Gluxer’s **Connect coding agent** page and use the endpoint shown there as `GLUXER_MCP_URL`.
+This is the thin-client v0.1.4 marketplace for Claude Code and Codex. Create a PAT on Gluxer’s **Connect coding agent** page and use the endpoint shown there as `GLUXER_MCP_URL`.
 
 ## Claude Code
 
@@ -32,4 +32,4 @@ The repository intentionally contains only rendered host packages and their cata
 
 Refresh the installed Codex package with one command:
 
-`codex plugin marketplace upgrade gluxer`
+`codex plugin marketplace upgrade gluxer && codex plugin add gluxer@gluxer`

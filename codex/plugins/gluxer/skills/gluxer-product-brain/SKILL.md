@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.3; host: codex -->
+<!-- behavior-version: 0.1.4; host: codex -->
 
 # Gluxer product brain
 
@@ -46,11 +46,11 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.3 and gluxerHost in every Gluxer tool call. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.4, gluxerHost, and gluxerSurface in every Gluxer tool call. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. When a tool response includes meta.relayVerbatim, deliver its single complete message word-for-word without summarizing, shortening, or adding a substitute opener. Use first-touch copy only when the server returns it; resumed projects pick up where they left off.
 3. Every discovery MCP turn has exactly one conversational beat. Deliver one complete final Glux message, then stop and wait for the user. A beat either asks one question, or presents one synthesis with its confirmation question in the same message. Never narrate an intermediate question or draft that a later message replaces.
 4. When a tool response includes meta.workExpectation, say it exactly before starting the longer step. Do not improvise timing or leave the user without the promised next step.
-5. When a tool response includes meta.openCanvasImmediately, relay the Glux message and open the first authenticated canvas link immediately, before generating anything. Keep that canvas open so the work appears as Gluxer accepts it. Opening the page is display-only; never drive the web UI.
+5. When a tool response includes meta.primaryAction with open_in_host_pane, use the app's Browser capability to open that exact URL immediately. If the pane open cannot be confirmed, put meta.primaryAction.fallbackMessage first in the reply, ahead of status copy. Keep the canvas open while work appears. Opening the page is display-only; never drive the web UI.
 6. For start-from-scratch intent, call glux_create_project with the user's name and optional one-line idea, then continue from the returned first discovery turn. A repository is not required.
 7. For a live URL or GitHub repository, call glux_import_product and present the returned populated canvas link; never reconstruct the import outside Gluxer's shared import flow.
 8. For PRD content supplied in chat, call glux_ingest_prd and ask only the gaps in its returned discovery state.
@@ -81,9 +81,9 @@ Discovery opens with this short framing beat before question one:
 
 ## Review surfaces
 
-When the current host exposes an in-app browser pane, such as the ChatGPT or Codex app, automatically open the exact Gluxer review link returned by the tool.
+In the ChatGPT or Codex desktop app, pass gluxerSurface app on every tool call and obey meta.primaryAction by opening its exact URL through the Browser capability immediately.
 
-When the current host has no in-app browser pane, print the exact review link for the user.
+In a command-line host, pass gluxerSurface cli and print meta.primaryAction.fallbackMessage as the first action. In the app, use that same first-position link whenever the pane open cannot be confirmed.
 
 Opening a Gluxer page for the user to view is allowed and required at review moments. Never click, type, submit, drive the web UI, inspect browsing history, or perform any Gluxer operation through the browser.
 
