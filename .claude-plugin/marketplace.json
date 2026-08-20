@@ -12,7 +12,7 @@
       "name": "gluxer",
       "source": "./claude-code/plugins/gluxer",
       "description": "Bring Gluxer product discovery, visual review, and approval gates into Claude Code.",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "category": "Productivity",
       "tags": [
         "product",
