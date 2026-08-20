@@ -1,6 +1,6 @@
 {
   "name": "gluxer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bring Gluxer product discovery, visual review, and approval gates into Codex.",
   "author": {
     "name": "Gluxer"
@@ -19,7 +19,7 @@
     ],
     "defaultPrompt": [
       "Glux, help me figure out this product.",
-      "Use Gluxer to resume this product from its canonical next action.",
+      "Use Gluxer to check where this project left off and continue from the next action.",
       "Open the current Gluxer section for visual review."
     ],
     "brandColor": "#FF4F40"
