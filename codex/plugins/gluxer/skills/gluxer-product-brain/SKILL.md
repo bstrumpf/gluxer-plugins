@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.7; host: codex -->
+<!-- behavior-version: 0.1.9; host: codex -->
 
 # Gluxer product brain
 
@@ -67,7 +67,7 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.7, gluxerHost, gluxerSurface, and the current gluxerEntryWelcomeShown session flag in every Gluxer tool call. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.9, gluxerHost, gluxerSurface, and the current gluxerEntryWelcomeShown session flag in every Gluxer tool call. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
 3. When a tool response includes meta.relayVerbatim, deliver its single complete message word-for-word without summarizing, shortening, or adding a substitute opener. Use first-touch copy only when the server returns it; resumed projects pick up where they left off.
 4. Every discovery MCP turn has exactly one conversational beat. Deliver one complete final Glux message, then stop and wait for the user. A beat either asks one question, or presents one synthesis with its confirmation question in the same message. Never narrate an intermediate question or draft that a later message replaces.
@@ -199,9 +199,10 @@ Use when: The next action is continue_discovery.
 
 1. Call glux_get_discovery_state.
 2. Follow its instructions, current question, mode, proposal shape, focused product context, and conversationalBeat contract.
-3. Deliver exactly one complete Glux message for that beat as the final user-facing message, then stop and wait. Never emit an intermediate question before a proposal.
-4. After a substantive answer or confirmed proposal, call glux_record_discovery_answer for exactly the active topic.
-5. Repeat one topic at a time until nextAction is create_product_map.
+3. For a synthesize topic, generate the same one complete proposal beat, then call glux_present_discovery_proposal with that text byte-for-byte and the matching structured proposal. This read-only presentation call adds inline controls only on supported hosts; unsupported hosts receive the same text beat.
+4. Deliver exactly one complete Glux message for that beat as the final user-facing message, then stop and wait. Never emit an intermediate question before a proposal.
+5. After a substantive answer or confirmed proposal, call glux_record_discovery_answer for exactly the active topic.
+6. Repeat one topic at a time until nextAction is create_product_map.
 
 ### product-map
 
@@ -378,6 +379,7 @@ Do not invent or promise excluded capabilities.
 - `glux_link_repository`
 - `glux_get_project_status`
 - `glux_get_discovery_state`
+- `glux_present_discovery_proposal`
 - `glux_record_discovery_answer`
 - `glux_get_product_map_generation_contract`
 - `glux_submit_product_map_artifact`
@@ -406,6 +408,7 @@ Do not invent or promise excluded capabilities.
 
 ## Current resources
 
+- `glux_discovery_proposal_app`
 - `glux_project_artifact`
 
 ## Host-native execution
