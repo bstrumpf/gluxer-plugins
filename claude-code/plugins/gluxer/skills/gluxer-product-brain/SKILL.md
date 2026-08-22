@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.13; host: claude-code -->
+<!-- behavior-version: 0.1.14; host: claude-code -->
 
 # Gluxer product brain
 
@@ -75,14 +75,14 @@ When discovery finishes and the live canvas is about to open, say exactly:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.13, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.14, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. Build-phase tools glux_get_task_context, glux_update_build_task_state, and glux_record_implementation must carry the workspace repository identity. A repository or monorepo mismatch blocks the call; relay Gluxer's refusal word-for-word and stop until the user switches folders, links this codebase, or picks the matching project. A missing remote requires the user's explicit folder confirmation first. Never infer or fabricate that confirmation.
 3. Workspace repository checks apply only to build-phase tools. Discovery, product map, wireframes, review, approval, style, handoff, and other design-phase tools remain folder-agnostic.
 4. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
 5. When a tool response includes meta.relayVerbatim, deliver its single complete message word-for-word without summarizing, shortening, or adding a substitute opener. Use first-touch copy only when the server returns it; resumed projects pick up where they left off.
 6. Every discovery MCP turn has exactly one conversational beat. Deliver one complete final Glux message, then stop and wait for the user. A beat either asks one question, or presents one synthesis with its confirmation question in the same message. Never narrate an intermediate question or draft that a later message replaces.
 7. Every Gluxer phase uses the same one-beat contract. When meta.conversationalBeat appears, show its one server-authored message word-for-word as a durable chat message; never narrate a draft or replace that message later in the same working turn.
-8. During Design, obey meta.nextInstruction as the single exact continuation. Unless waitForUser is true, call its named tool with its supplied project, section, screen, and breakpoint immediately. Screens pending without a next instruction is a server contract bug: state the gap honestly and stop instead of leaving the canvas idle or improvising.
+8. During Design, obey meta.nextInstruction as the single exact continuation. Unless waitForUser is true, call its named tool with its supplied project, section, screen, and breakpoint immediately. The one exception is an accepted wireframe response with meta.relayVerbatim: deliver that message word-for-word as the complete final assistant turn, then resume its durable nextInstruction on the next user turn. Screens pending without a next instruction is a server contract bug: state the gap honestly and stop instead of leaving the canvas idle or improvising.
 9. When a tool response includes meta.workExpectation, say it exactly before starting the longer step. Do not improvise timing or leave the user without the promised next step.
 10. When a tool response includes meta.primaryAction with open_in_host_pane, use the app's Browser capability to open that exact URL immediately. At discovery completion, first say the exact canvas build-start message above. That message is the complete user-facing announcement: do not mention the Browser, tools, exact URLs, visibility requirements, or display-only mechanics unless opening fails. If the pane open cannot be confirmed, put meta.primaryAction.fallbackMessage first in the reply, ahead of status copy. Keep the canvas open while work appears. Opening the page is display-only; never drive the web UI.
 11. Whenever the user wants to start a new project, call glux_get_new_project_options first, relay its complete four-option message word-for-word, and wait for one choice. Never create or import before this fork.
@@ -235,8 +235,8 @@ Use when: The next section needs reviewable visuals.
 1. Execute the server's meta.nextInstruction: call glux_get_wireframe_generation_contract for its exact section, screen, and breakpoint.
 2. Generate that one bounded screen in the host and call glux_submit_wireframe_artifact immediately.
 3. If validation rejects it, follow the returned repair directive immediately and resubmit before moving on.
-4. After acceptance, show meta.conversationalBeat word-for-word as one durable progress message, such as: Landing Page is sketched — 2 of 6 in Get Started. Next: Sign Up.
-5. Execute the next returned meta.nextInstruction immediately. Build one screen at a time until the current section is complete; then call glux_get_review_state and wait for explicit review and approval.
+4. After acceptance, deliver the single meta.relayVerbatim message word-for-word as the complete final assistant turn, such as: Landing Page is sketched — 2 of 6 in Get Started. Next: Sign Up. Do not execute another contract in that same turn.
+5. On the next user turn, resume the durable meta.nextInstruction and build the next screen. Continue one screen per visible assistant turn until the current section is complete; then call glux_get_review_state and wait for explicit review and approval.
 6. A pending screen without meta.nextInstruction is a contract failure. Say that Gluxer did not provide the next step and stop; never leave the canvas silently idle or invent a step.
 
 ### feedback
