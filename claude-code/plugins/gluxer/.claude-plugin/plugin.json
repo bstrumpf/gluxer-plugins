@@ -1,7 +1,7 @@
 {
   "name": "gluxer",
   "description": "Bring Gluxer product discovery, visual review, and approval gates into Claude Code.",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "author": {
     "name": "Gluxer"
   },
