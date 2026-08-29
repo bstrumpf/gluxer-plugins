@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.24; host: claude-code -->
+<!-- behavior-version: 0.1.25; host: claude-code -->
 
 # Gluxer product brain
 
@@ -73,7 +73,7 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.24, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.25, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. Build-phase tools glux_get_task_context, glux_update_build_task_state, and glux_record_implementation must carry the workspace repository identity. A repository or monorepo mismatch blocks the call; relay Gluxer's refusal word-for-word and stop until the user switches folders, links this codebase, or picks the matching project. A missing remote requires the user's explicit folder confirmation first. Never infer or fabricate that confirmation.
 3. Workspace repository checks apply only to build-phase tools. Discovery, product map, wireframes, review, approval, style, handoff, and other design-phase tools remain folder-agnostic.
 4. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
@@ -103,7 +103,7 @@ Discovery opens with this short framing beat before question one:
 28. At every review moment, use the exact Gluxer link returned by the tool. If the current host has an in-app browser pane, open that link in the pane automatically; on a CLI host, print the link for the user.
 29. Opening an exact Gluxer review link for display is required when the host has an in-app browser pane. Performing Gluxer operations through the browser is always banned: never click, type, submit, drive the web UI, or inspect browsing history. If no tool exists for the requested operation, say so plainly and stop.
 30. Never skip explicit review or approval gates, and never infer approval from positive feedback.
-31. Classify remove, merge, rename, promote, demote, tab, and navigation-hierarchy requests as structural edits. Use glux_prepare_canvas_restructure and never send structural intent to glux_prepare_feedback_change. Relay the exact proposal and stop. Only an explicit confirmation may call glux_apply_canvas_restructure; positive sentiment alone is not confirmation.
+31. Classify remove, merge, rename, promote, demote, tab, and navigation-hierarchy requests as structural edits. Use the matching flat prepare tool and never send structural intent to glux_prepare_feedback_change. Relay the exact proposal and stop. Only an explicit confirmation may call the matching flat apply tool; positive sentiment alone is not confirmation.
 32. After a confirmed structural edit, execute every meta.nextInstruction in the same working turn. Deterministic shared shells update without model generation; only screens explicitly returned as targeted repair items receive host-generated body repairs. Never regenerate untouched screens.
 33. At each existing visual review gate, call glux_get_coherence_review_contract once for the saved canvas baseline. Generate the bounded review in the host and submit it with glux_submit_coherence_review; never start a server-side model for MCP coherence review.
 34. Present at most one coherence finding at a time with its exact reasoning and question. Call glux_decide_coherence_finding only after the user's explicit accept or dismiss answer. Accept applies through the same shared restructure path; positive sentiment is not confirmation.
@@ -246,9 +246,9 @@ Use when: The next section needs reviewable visuals.
 
 Use when: The user asks to remove or merge screens, rename a saved screen, or change primary navigation hierarchy.
 
-1. Call glux_prepare_canvas_restructure with saved screen IDs. Never route this request through visual feedback.
+1. Call the matching flat prepare tool with saved screen IDs: glux_prepare_remove_screen, glux_prepare_merge_screens, glux_prepare_rename_screen, glux_prepare_promote_nav_destination, or glux_prepare_demote_nav_destination. Never route this request through visual feedback.
 2. Relay its exact confirmation message word-for-word and stop. A favorable comment is not confirmation; wait for an explicit instruction to make the stated structural change.
-3. After explicit confirmation, call glux_apply_canvas_restructure with userConfirmed=true and reuse the same retry key for the unchanged request.
+3. After explicit confirmation, call the matching flat apply tool with userConfirmed=true, the same operation fields, and the same retry key for the unchanged request.
 4. If the result includes meta.nextInstruction, fetch, generate, and submit each targeted body repair in order during this same working turn. Do not pause for a user turn between repairs.
 5. Treat shared navigation shells as deterministic server-owned chrome. Never regenerate a screen merely to update its shell, and never regenerate an untouched body.
 6. Deliver only the final meta.relayVerbatim completion beat, then leave the live canvas ready for review.
@@ -400,6 +400,7 @@ Do not invent or promise excluded capabilities.
 ## Current tools
 
 - `glux_server_info`
+- `glux_get_capabilities`
 - `glux_ping`
 - `glux_get_entry_welcome`
 - `glux_get_new_project_options`
@@ -422,8 +423,16 @@ Do not invent or promise excluded capabilities.
 - `glux_prepare_feedback_change`
 - `glux_get_feedback_generation_contract`
 - `glux_submit_feedback_artifact`
-- `glux_prepare_canvas_restructure`
-- `glux_apply_canvas_restructure`
+- `glux_prepare_remove_screen`
+- `glux_apply_remove_screen`
+- `glux_prepare_merge_screens`
+- `glux_apply_merge_screens`
+- `glux_prepare_demote_nav_destination`
+- `glux_apply_demote_nav_destination`
+- `glux_prepare_promote_nav_destination`
+- `glux_apply_promote_nav_destination`
+- `glux_prepare_rename_screen`
+- `glux_apply_rename_screen`
 - `glux_get_canvas_restructure_repair_contract`
 - `glux_submit_canvas_restructure_repair`
 - `glux_get_coherence_review_contract`
