@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.29; host: claude-code -->
+<!-- behavior-version: 0.1.30; host: claude-code -->
 
 # Gluxer product brain
 
@@ -73,7 +73,7 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.29, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.30, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. Build-phase tools glux_get_task_context, glux_update_build_task_state, and glux_record_implementation must carry the workspace repository identity. A repository or monorepo mismatch blocks the call; relay Gluxer's refusal word-for-word and stop until the user switches folders, links this codebase, or picks the matching project. A missing remote requires the user's explicit folder confirmation first. Never infer or fabricate that confirmation.
 3. Workspace repository checks apply only to build-phase tools. Discovery, product map, wireframes, review, approval, style, handoff, and other design-phase tools remain folder-agnostic.
 4. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
@@ -214,7 +214,7 @@ Use when: The next action is continue_discovery.
 
 1. Call glux_get_discovery_state.
 2. Follow its instructions, current question, mode, proposal shape, focused product context, and conversationalBeat contract.
-3. For a focused ask follow-up or synthesize topic, call glux_present_discovery_beat with the complete visible acknowledgment, rationale, one typed question, and the reducer-owned structured proposal shape and fixed choices. Relay canonicalBeat.text byte-for-byte as the one complete surface and stop. This launch path is text-only even when the host supports Apps. glux_present_discovery_proposal is a v0.1.x compatibility adapter scheduled for removal in v0.2.0.
+3. For a focused ask follow-up or synthesize topic, call glux_present_discovery_beat with the complete visible acknowledgment, rationale, one typed question, the reducer-owned structured proposal shape and fixed choices, and at most two optional ask suggestions. When a qualified discovery state or record result includes flat nextInstruction fields, call glux_present_discovery_beat with those exact server-owned values. Relay canonicalBeat.text byte-for-byte as the one complete surface and stop unless the server qualifies this exact signed renderer session for the equivalent Discovery App. Never infer App support from MIME advertising alone. glux_present_discovery_proposal is a text-only v0.1.x compatibility adapter scheduled for removal in v0.2.0.
 4. Deliver exactly one surface for that beat, then stop and wait. Never emit an intermediate question before a proposal. A component that cannot wake the model owns editing only; wait for the user's typed chat confirmation and record the component-provided draft.
 5. After a substantive answer or confirmed proposal, call glux_record_discovery_answer for exactly the active topic.
 6. Repeat one topic at a time until nextAction is create_product_map.
@@ -460,7 +460,7 @@ Do not invent or promise excluded capabilities.
 
 ## Current resources
 
-- `glux_discovery_proposal_app`
+- `glux_discovery_beat_app`
 - `glux_project_artifact`
 
 ## Host-native execution
