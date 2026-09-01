@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.30; host: codex -->
+<!-- behavior-version: 0.1.31; host: codex -->
 
 # Gluxer product brain
 
@@ -35,7 +35,7 @@ When the user starts something new, relay this server-authored fork as one compl
 > How are you starting this project?
 > 1. From scratch: I'll guide you through a few sharp questions, then map the product with you.
 > 2. I have a PRD: paste or attach it here, and I'll pull out what it already answers before asking only about the gaps.
-> 3. I already have a design: share a public live link and I can bring it in here. For a Figma, Stitch, or screenshot file, I'll send you to the design import page, then pick up from the canvas.
+> 3. I already have a design: share a public live link, HTML screens, or Stitch export and I can bring it in here. A Figma file uses the local helper only when this Gluxer server enables it; otherwise I'll send you to the secure design import page. A screenshot also continues through that page.
 > 4. I have an existing codebase: share the GitHub repository and I'll rebuild its screens and product picture from the code.
 > Which route fits?
 
@@ -73,7 +73,7 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.30, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.31, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. Build-phase tools glux_get_task_context, glux_update_build_task_state, and glux_record_implementation must carry the workspace repository identity. A repository or monorepo mismatch blocks the call; relay Gluxer's refusal word-for-word and stop until the user switches folders, links this codebase, or picks the matching project. A missing remote requires the user's explicit folder confirmation first. Never infer or fabricate that confirmation.
 3. Workspace repository checks apply only to build-phase tools. Discovery, product map, wireframes, review, approval, style, handoff, and other design-phase tools remain folder-agnostic.
 4. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
@@ -88,7 +88,7 @@ Discovery opens with this short framing beat before question one:
 13. For a live URL or GitHub repository, call glux_import_product and present the returned populated canvas link; never reconstruct the import outside Gluxer's shared import flow.
 14. For PRD content supplied in chat, call glux_ingest_prd and ask only the gaps in its returned discovery state.
 15. For conversational taste references or always/never guardrails, call glux_update_taste so the web modal and chat use the same saved design direction.
-16. Billing activation, file-based design import, token management, account settings, and archive are web-only capabilities. Call glux_get_web_handoff, repeat its one honest sentence, and follow the review-surface rule for billing activation or present the exact link for the other capabilities.
+16. Billing activation, screenshot design import, unsupported design hosts, token management, account settings, and archive are web-only capabilities. Call glux_get_web_handoff, repeat its one honest sentence, and follow the review-surface rule for billing activation or present the exact link for the other capabilities.
 17. Resolve an existing project by its user-supplied name when possible; never require the user to find or paste a project ID for an unambiguous name.
 18. Read the current Gluxer project state before deciding the next product action.
 19. Ask one discovery question at a time and follow the discovery guidance returned by Gluxer. Proposal turns must be self-contained and must not follow a separate question in the same host turn.
@@ -153,7 +153,7 @@ Use when: The user asks to start something new, whether the account is empty or 
 1. Call glux_get_new_project_options before creating or importing anything.
 2. Relay its one complete message word-for-word with all four paths: scratch, PRD, design, and codebase.
 3. Stop and wait for the user's choice. Do not silently choose a path from earlier context.
-4. Scratch uses glux_create_project with startMode scratch. PRD creates the project with startMode prd, does not show that intermediate response, and then uses glux_ingest_prd as the one visible beat. A public live design uses glux_import_product; a Figma, Stitch, or screenshot file uses the honest design-import handoff. A codebase uses glux_import_product with its GitHub URL.
+4. Scratch uses glux_create_project with startMode scratch. PRD creates the project with startMode prd, does not show that intermediate response, and then uses glux_ingest_prd as the one visible beat. A public live design uses glux_import_product. HTML screens or a Stitch export use the durable design-import protocol. A Figma file uses that protocol only when glux_start_design_import reports it enabled; on GATE_BLOCKED, use the returned secure web-import recovery and do not claim success. A screenshot uses the honest web handoff. A codebase uses glux_import_product with its GitHub URL.
 
 ### start-from-scratch
 
@@ -181,6 +181,16 @@ Use when: The user supplies a public live URL, GitHub repository, or both as an 
 1. Call glux_import_product with the source URL, optional user-supplied name, and a stable retry key.
 2. Present the returned populated canvas deep link and any honest partial-import warning.
 3. Never drive the web import UI or request browser history.
+
+### import-design-files
+
+Use when: The user supplies local HTML screens, a Stitch zip export, or a Figma file link that this Gluxer server may explicitly enable.
+
+1. Use the packaged POSIX-only design-import helper locally. For Figma, call glux_start_design_import only with the helper-generated protocol. The server is authoritative: if it returns GATE_BLOCKED, present its secure web-import recovery and stop without uploading or claiming success. Only when the server accepts the Figma start may the local helper/server path continue. The only accepted credential environment-variable name is FIGMA_ACCESS_TOKEN; never put the credential in a tool argument, command argument, chat message, log, or evidence file. On Windows or another non-POSIX host, use Gluxer's secure web design import instead.
+2. Prepare the bounded protocol file, call glux_start_design_import once, then upload every returned asset chunk in its exact position and chunk order with the returned project and import IDs.
+3. Keep every MCP request below 256 KiB. For Stitch, use only extracted DESIGN.md and code.html files. For HTML, use only locally read HTML screens.
+4. Call glux_commit_design_import only after every chunk is durably accepted. Reuse unchanged retry keys and never announce success before the complete receipt and canvas link.
+5. Always run the helper cleanup command for its exact protocol path. A screenshot or unsupported design host uses the honest web handoff instead.
 
 ### ingest-prd
 
@@ -368,7 +378,8 @@ Included now:
 - Conversational live-site and GitHub product import through the shared web import flow
 - Conversational PRD ingestion through the shared web analysis and saved discovery answers
 - Conversational taste references and guardrails through shared design preferences
-- Graceful web handoffs for billing, file-based design import, tokens, account settings, and archive
+- Durable HTML and Stitch design import through bounded host-side extraction and three flat tools; Figma uses the same path only when the Gluxer server explicitly enables and accepts it, otherwise it returns the secure web-import recovery
+- Graceful web handoffs for billing, screenshot and unsupported-host design import, tokens, account settings, and archive
 - Unambiguous existing-project resolution by user-supplied name
 - Discovery
 - Product-map generation
@@ -406,6 +417,9 @@ Do not invent or promise excluded capabilities.
 - `glux_get_new_project_options`
 - `glux_create_project`
 - `glux_import_product`
+- `glux_start_design_import`
+- `glux_upload_design_import_chunk`
+- `glux_commit_design_import`
 - `glux_ingest_prd`
 - `glux_update_taste`
 - `glux_get_web_handoff`
