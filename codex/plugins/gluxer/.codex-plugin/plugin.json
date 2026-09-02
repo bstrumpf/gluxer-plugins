@@ -1,11 +1,17 @@
 {
   "name": "gluxer",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "description": "Bring Gluxer product discovery, visual review, and approval gates into Codex.",
   "author": {
     "name": "Gluxer"
   },
   "skills": "./skills/",
+  "mcpServers": {
+    "gluxer": {
+      "url": "https://mcp.gluxer.com/api/mcp",
+      "bearer_token_env_var": "GLUXER_PAT"
+    }
+  },
   "interface": {
     "displayName": "Gluxer",
     "shortDescription": "Product understanding inside Codex.",

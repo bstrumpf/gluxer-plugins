@@ -25336,7 +25336,7 @@ async function prepare(args) {
     commit: { sourceSha256, idempotencyKey: `${prefix}-commit`.slice(0, 100) }
   };
   for (const upload of uploads) {
-    const envelope = { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "glux_upload_design_import_chunk", arguments: { ...upload, projectId: "00000000-0000-4000-8000-000000000000", importId: "00000000-0000-4000-8000-000000000000", gluxerPluginVersion: "0.1.32", gluxerHost: "codex", gluxerSurface: "cli" } } };
+    const envelope = { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "glux_upload_design_import_chunk", arguments: { ...upload, projectId: "00000000-0000-4000-8000-000000000000", importId: "00000000-0000-4000-8000-000000000000", gluxerPluginVersion: "0.1.33", gluxerHost: "codex", gluxerSurface: "cli" } } };
     if (Buffer.byteLength(JSON.stringify(envelope), "utf8") > MAX_JSON_RPC_BYTES) throw new Error("Generated MCP request exceeds the safe JSON-RPC limit");
   }
   const directory = await mkdtemp(path.join(os.tmpdir(), WORK_PREFIX));
