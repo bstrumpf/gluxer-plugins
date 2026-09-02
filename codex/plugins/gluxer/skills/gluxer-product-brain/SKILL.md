@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.31; host: codex -->
+<!-- behavior-version: 0.1.32; host: codex -->
 
 # Gluxer product brain
 
@@ -73,7 +73,7 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.31, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.32, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. Build-phase tools glux_get_task_context, glux_update_build_task_state, and glux_record_implementation must carry the workspace repository identity. A repository or monorepo mismatch blocks the call; relay Gluxer's refusal word-for-word and stop until the user switches folders, links this codebase, or picks the matching project. A missing remote requires the user's explicit folder confirmation first. Never infer or fabricate that confirmation.
 3. Workspace repository checks apply only to build-phase tools. Discovery, product map, wireframes, review, approval, style, handoff, and other design-phase tools remain folder-agnostic.
 4. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
@@ -271,13 +271,16 @@ Use when: The user gives actionable feedback on a reviewable visual.
 2. If meta.pendingSelection is present and the user has not supplied feedback yet, say: I see you selected {screen} on the canvas. What's your feedback?
 3. If the user already supplied unnamed feedback, use meta.pendingSelection.outlineScreenId as the anchor and pass its ID as pendingSelectionId.
 4. If the feedback clearly references a different screen, ask the user to confirm the switch before continuing; after confirmation pass retargetConfirmed=true. Never silently change targets.
-5. Classify impactAxes using only flow, navigation_shell, shared_component, screen_family, and product_rule, and set breakpointScope to all, desktop, tablet, or mobile. Reason across the saved product map, identify the exact affected screen set, then call glux_prepare_feedback_change with those flat fields and a concise first-person recommendation. Gluxer derives membership reasons from its saved relation plan. The server plan is authoritative: reordered IDs are accepted, but duplicate, missing, unknown, or extra IDs fail closed.
-6. Relay meta.relayVerbatim word-for-word and stop for the user's explicit confirmation. Do not generate or submit a revision in this turn.
-7. If the user declines, do nothing. If the user modifies the request, use a new changeKey and prepare a new impact proposal before asking again.
-8. Only after an explicit yes, call glux_get_feedback_generation_contract with the returned impactProposalId and userConfirmed=true for the exact proposed affected screens and the unchanged impact authority fields.
-9. After confirmation, execute every returned meta.nextInstruction.tool with its minimal arguments. A deterministic contract omits rawWireframeOutput because the server submits its own exact candidate. Fill rawWireframeOutput only when the server returns that documented placeholder. After the first accepted target, glux_continue_feedback_change owns all durable authority and selects every remaining exact target from projectId plus changeId; never reconstruct authority from summaries. Continue until no next instruction remains, then replay the final submit with the same exact arguments; do not stop after the first screen or breakpoint.
-10. If verification rejects, report failure honestly and follow the returned authoritative or repair directive.
-11. Claim only the changes Gluxer returns as verified.
+5. When one anchored question or a bounded options proposal is needed, call glux_present_feedback_beat with the complete flat beat fields, relay its exact text, and stop. Never ask a second unanchored question or invent option copy outside the returned beat.
+6. After the user's answer, call glux_prepare_feedback_change with the pending dialogueId plus the exact dialogueAnswer and a complete resolved feedback request. Classify impactAxes using only flow, navigation_shell, shared_component, screen_family, and product_rule, and set breakpointScope to all, desktop, tablet, or mobile. Reason across the saved product map, identify the exact affected screen set, and give a concise first-person recommendation. Gluxer derives membership reasons from its saved relation plan. The server plan is authoritative: reordered IDs are accepted, but duplicate, missing, unknown, or extra IDs fail closed.
+7. Relay meta.relayVerbatim word-for-word and stop for the user's explicit confirmation. Do not generate or submit a revision in this turn.
+8. If the user declines, do nothing. If the user modifies the request, use a new changeKey and prepare a new impact proposal before asking again.
+9. Only after an explicit yes, call glux_get_feedback_generation_contract with the returned impactProposalId and userConfirmed=true for the exact proposed affected screens and the unchanged impact authority fields.
+10. After confirmation, execute every returned meta.nextInstruction.tool with its minimal arguments. A deterministic contract omits rawWireframeOutput because the server submits its own exact candidate. Fill rawWireframeOutput only when the server returns that documented placeholder. After the first accepted target, glux_continue_feedback_change owns all durable authority and selects every remaining exact target from projectId plus changeId; never reconstruct authority from summaries. Continue until no next instruction remains, then replay the final submit with the same exact arguments; do not stop after the first screen or breakpoint.
+11. If verification rejects, report failure honestly and follow the returned authoritative or repair directive.
+12. When the user asks to reapply the last verified feedback, call glux_reapply_feedback_change and execute its exact server-owned next instruction. Legacy snapshots without reapply authority fail honestly.
+13. When the user explicitly asks to undo the current feedback change, call glux_revert_feedback_change with the exact current changeId and one stable idempotencyKey. Do not ask for or send a redundant userConfirmed field. Relay the exact revert receipt and treat same-key replay as write-free.
+14. Claim only the changes Gluxer returns as verified.
 
 ### approval
 
@@ -435,10 +438,13 @@ Do not invent or promise excluded capabilities.
 - `glux_get_wireframe_generation_contract`
 - `glux_submit_wireframe_artifact`
 - `glux_get_review_state`
+- `glux_present_feedback_beat`
 - `glux_prepare_feedback_change`
 - `glux_get_feedback_generation_contract`
 - `glux_submit_feedback_artifact`
 - `glux_continue_feedback_change`
+- `glux_reapply_feedback_change`
+- `glux_revert_feedback_change`
 - `glux_prepare_remove_screen`
 - `glux_apply_remove_screen`
 - `glux_prepare_merge_screens`
