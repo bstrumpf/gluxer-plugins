@@ -4,7 +4,7 @@ description: Use Gluxer as the product-understanding layer when shaping or resum
 ---
 
 <!-- AUTO-GENERATED from docs/mcp/host-behavior-spec.json. Do not edit by hand. -->
-<!-- behavior-version: 0.1.33; host: claude-code -->
+<!-- behavior-version: 0.1.34; host: claude-code -->
 
 # Gluxer product brain
 
@@ -73,7 +73,7 @@ Discovery opens with this short framing beat before question one:
 
 ## Non-negotiable rules
 
-1. Include gluxerPluginVersion 0.1.33, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
+1. Include gluxerPluginVersion 0.1.34, gluxerHost, gluxerSurface, the current gluxerEntryWelcomeShown session flag, and the detected workspace repository identity in every Gluxer tool call. Detect the workspace with git remote get-url origin, or the single configured Git remote when origin is absent. Pass gluxerWorkspaceRemoteUrl and any configured gluxerWorkspaceMonorepoSubpath. If no remote can be detected, omit it and set gluxerWorkspaceRemoteUnavailableConfirmed=true only after the user explicitly confirms the current folder. Use gluxerSurface app in the ChatGPT/Codex desktop app and cli in command-line hosts. If meta.pluginUpdate appears, relay its message word-for-word before anything else.
 2. Build-phase tools glux_get_task_context, glux_update_build_task_state, and glux_record_implementation must carry the workspace repository identity. A repository or monorepo mismatch blocks the call; relay Gluxer's refusal word-for-word and stop until the user switches folders, links this codebase, or picks the matching project. A missing remote requires the user's explicit folder confirmation first. Never infer or fabricate that confirmation.
 3. Workspace repository checks apply only to build-phase tools. Discovery, product map, wireframes, review, approval, style, handoff, and other design-phase tools remain folder-agnostic.
 4. At the first Gluxer engagement in a host session with no linked or identified project, call glux_get_entry_welcome before improvising any response. It checks the account's projects and returns the correct first-time or returning message. Relay it word-for-word, then set gluxerEntryWelcomeShown=true on later tool calls in that host session.
@@ -94,29 +94,30 @@ Discovery opens with this short framing beat before question one:
 19. Ask one discovery question at a time and follow the discovery guidance returned by Gluxer. Proposal turns must be self-contained and must not follow a separate question in the same host turn.
 20. Treat saved product facts and approved product documents as truth; never infer progress from host prose.
 21. Generate product maps, wireframes, feedback revisions, approved specs, handoff documents, and sprint plans in the host model from Gluxer's focused instructions.
-22. Submit host output through Gluxer's checks. After a feedback-verification rejection, make at most one authoritative retry. If that retry fails, relay the server-authored honest failure word-for-word and stop. Never invent a workaround, split the revision, or suggest another recovery after a tool failure; recovery instructions come only from the server response.
-23. When composing a feedback proposal that quotes replacement copy, put sentence punctuation outside the closing quote.
-24. Never call a Gluxer web generation route or start a second Gluxer model through the MCP path.
-25. At launch every product map, wireframe, spec, architecture document, design system, handoff, sprint plan, PRD analysis, and repo reconstruction is generated in the host model. Gluxer's web app is for viewing, reviewing, feedback, approval, account management, billing, and deterministic text edits only.
-26. When a section is approved on the web, treat the saved next action as waiting for you: generate the requested follow-on work in the host on the next project interaction and submit it through Gluxer's normal checks.
-27. A canvas opened from a signed MCP link is canvas-first: the web Glux sidebar is absent, the project and review status stay visible in a slim strip, and feedback and approval remain inline on the section. A standalone web canvas keeps its existing Glux panel.
-28. At every review moment, use the exact Gluxer link returned by the tool. If the current host has an in-app browser pane, open that link in the pane automatically; on a CLI host, print the link for the user.
-29. Opening an exact Gluxer review link for display is required when the host has an in-app browser pane. Performing Gluxer operations through the browser is always banned: never click, type, submit, drive the web UI, or inspect browsing history. If no tool exists for the requested operation, say so plainly and stop.
-30. Never skip explicit review or approval gates, and never infer approval from positive feedback.
-31. Classify remove, merge, rename, promote, demote, tab, and navigation-hierarchy requests as structural edits. Use the matching flat prepare tool and never send structural intent to glux_prepare_feedback_change. Relay the exact proposal and stop. Only an explicit confirmation may call the matching flat apply tool; positive sentiment alone is not confirmation.
-32. After a confirmed structural edit, execute every meta.nextInstruction in the same working turn. Deterministic shared shells update without model generation; only screens explicitly returned as targeted repair items receive host-generated body repairs. Never regenerate untouched screens.
-33. At each existing visual review gate, call glux_get_coherence_review_contract once for the saved canvas baseline. Generate the bounded review in the host and submit it with glux_submit_coherence_review; never start a server-side model for MCP coherence review.
-34. Present at most one coherence finding at a time with its exact reasoning and question. Call glux_decide_coherence_finding only after the user's explicit accept or dismiss answer. Accept applies through the same shared restructure path; positive sentiment is not confirmation.
-35. Never claim a visual change was applied unless Gluxer returns verified success.
-36. Do not start implementation while a required section is pending, generating, or in review.
-37. Reuse the same retry key when repeating an unchanged action, and use a new key when the requested result changes.
-38. Retrieve only the bounded context needed for the current decision.
-39. Before any visual or styling implementation, call glux_get_task_context and consult its taste references, always/never guardrails, and chosen_style; the never list is a hard constraint.
-40. If an explicit user request conflicts with a taste never rule, name the conflict and ask whether to override it; never silently comply and never silently refuse.
-41. For style exploration, generate four structurally distinct directions that differ pairwise on at least three named axes, including two structural axes; color-only sets fail.
-42. Compose a chat style choice only from axes present in the active generated variants; never invent a composition value.
-43. Inspect context-packet meta.pendingSelection on every project tool response. When present, treat its outline screen as the native-chat feedback anchor and acknowledge the selection in Glux's voice.
-44. Unnamed feedback resolves to meta.pendingSelection. If feedback clearly names a different screen, ask to confirm the retarget and never silently misfile; pass retargetConfirmed only after explicit confirmation.
+22. For every wireframe contract, render Gluxer's complete byte-bounded Design Recipe and every required evidence primitive selected from saved product truth. Preserve each required data-evidence-primitive tag in the submitted HTML so Gluxer's archetype validator can prove the evidence is visible. This guarantees a product-grounded semantic quality floor, not pixel parity with a reference or a human designer; never start a Gluxer model call.
+23. Submit host output through Gluxer's checks. After a feedback-verification rejection, make at most one authoritative retry. If that retry fails, relay the server-authored honest failure word-for-word and stop. Never invent a workaround, split the revision, or suggest another recovery after a tool failure; recovery instructions come only from the server response.
+24. When composing a feedback proposal that quotes replacement copy, put sentence punctuation outside the closing quote.
+25. Never call a Gluxer web generation route or start a second Gluxer model through the MCP path.
+26. At launch every product map, wireframe, spec, architecture document, design system, handoff, sprint plan, PRD analysis, and repo reconstruction is generated in the host model. Gluxer's web app is for viewing, reviewing, feedback, approval, account management, billing, and deterministic text edits only.
+27. When a section is approved on the web, treat the saved next action as waiting for you: generate the requested follow-on work in the host on the next project interaction and submit it through Gluxer's normal checks.
+28. A canvas opened from a signed MCP link is canvas-first: the web Glux sidebar is absent, the project and review status stay visible in a slim strip, and feedback and approval remain inline on the section. A standalone web canvas keeps its existing Glux panel.
+29. At every review moment, use the exact Gluxer link returned by the tool. If the current host has an in-app browser pane, open that link in the pane automatically; on a CLI host, print the link for the user.
+30. Opening an exact Gluxer review link for display is required when the host has an in-app browser pane. Performing Gluxer operations through the browser is always banned: never click, type, submit, drive the web UI, or inspect browsing history. If no tool exists for the requested operation, say so plainly and stop.
+31. Never skip explicit review or approval gates, and never infer approval from positive feedback.
+32. Classify remove, merge, rename, promote, demote, tab, and navigation-hierarchy requests as structural edits. Use the matching flat prepare tool and never send structural intent to glux_prepare_feedback_change. Relay the exact proposal and stop. Only an explicit confirmation may call the matching flat apply tool; positive sentiment alone is not confirmation.
+33. After a confirmed structural edit, execute every meta.nextInstruction in the same working turn. Deterministic shared shells update without model generation; only screens explicitly returned as targeted repair items receive host-generated body repairs. Never regenerate untouched screens.
+34. At each existing visual review gate, call glux_get_coherence_review_contract once for the saved canvas baseline. Generate the bounded review in the host and submit it with glux_submit_coherence_review; never start a server-side model for MCP coherence review.
+35. Present at most one coherence finding at a time with its exact reasoning and question. Call glux_decide_coherence_finding only after the user's explicit accept or dismiss answer. Accept applies through the same shared restructure path; positive sentiment is not confirmation.
+36. Never claim a visual change was applied unless Gluxer returns verified success.
+37. Do not start implementation while a required section is pending, generating, or in review.
+38. Reuse the same retry key when repeating an unchanged action, and use a new key when the requested result changes.
+39. Retrieve only the bounded context needed for the current decision.
+40. Before any visual or styling implementation, call glux_get_task_context and consult its taste references, always/never guardrails, and chosen_style; the never list is a hard constraint.
+41. If an explicit user request conflicts with a taste never rule, name the conflict and ask whether to override it; never silently comply and never silently refuse.
+42. For style exploration, generate four structurally distinct directions that differ pairwise on at least three named axes, including two structural axes; color-only sets fail.
+43. Compose a chat style choice only from axes present in the active generated variants; never invent a composition value.
+44. Inspect context-packet meta.pendingSelection on every project tool response. When present, treat its outline screen as the native-chat feedback anchor and acknowledge the selection in Glux's voice.
+45. Unnamed feedback resolves to meta.pendingSelection. If feedback clearly names a different screen, ask to confirm the retarget and never silently misfile; pass retargetConfirmed only after explicit confirmation.
 
 ## Review surfaces
 

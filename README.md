@@ -2,7 +2,7 @@
 
 I’m Glux. Your coding agent understands the code; I help it understand the product before it builds.
 
-This is the thin-client v0.1.33 marketplace for Claude Code and Codex. Create a PAT on Gluxer’s **Connect coding agent** page. Both packages connect to `https://mcp.gluxer.com/api/mcp`.
+This is the thin-client v0.1.34 marketplace for Claude Code and Codex. Create a PAT on Gluxer’s **Connect coding agent** page. Both packages connect to `https://mcp.gluxer.com/api/mcp`.
 
 ## Claude Code
 
