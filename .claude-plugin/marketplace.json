@@ -12,7 +12,7 @@
       "name": "gluxer",
       "source": "./claude-code/plugins/gluxer",
       "description": "Bring Gluxer product discovery, host-rendered product wireframes, visual review, and approval gates into Claude Code without Gluxer model spend.",
-      "version": "0.1.36",
+      "version": "0.1.37",
       "category": "Productivity",
       "tags": [
         "product",
