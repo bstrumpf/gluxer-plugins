@@ -9744,6 +9744,9 @@ var require_lib3 = __commonJS({
   }
 });
 
+// src/mcp/plugin-version.ts
+var GLUXER_PLUGIN_VERSION = "0.1.36";
+
 // scripts/design-import-host-helper.ts
 var import_jszip3 = __toESM(require_lib3());
 import { createHash as createHash3, randomBytes } from "node:crypto";
@@ -25336,7 +25339,7 @@ async function prepare(args) {
     commit: { sourceSha256, idempotencyKey: `${prefix}-commit`.slice(0, 100) }
   };
   for (const upload of uploads) {
-    const envelope = { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "glux_upload_design_import_chunk", arguments: { ...upload, projectId: "00000000-0000-4000-8000-000000000000", importId: "00000000-0000-4000-8000-000000000000", gluxerPluginVersion: "0.1.34", gluxerHost: "codex", gluxerSurface: "cli" } } };
+    const envelope = { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "glux_upload_design_import_chunk", arguments: { ...upload, projectId: "00000000-0000-4000-8000-000000000000", importId: "00000000-0000-4000-8000-000000000000", gluxerPluginVersion: GLUXER_PLUGIN_VERSION, gluxerHost: "codex", gluxerSurface: "cli" } } };
     if (Buffer.byteLength(JSON.stringify(envelope), "utf8") > MAX_JSON_RPC_BYTES) throw new Error("Generated MCP request exceeds the safe JSON-RPC limit");
   }
   const directory = await mkdtemp(path.join(os.tmpdir(), WORK_PREFIX));

@@ -1,7 +1,7 @@
 {
   "name": "gluxer",
-  "version": "0.1.34",
-  "description": "Bring Gluxer product discovery, host-rendered wireframes with a product-grounded semantic quality floor, visual review, and approval gates into Codex without Gluxer model spend.",
+  "version": "0.1.36",
+  "description": "Bring Gluxer product discovery, host-rendered product wireframes, visual review, and approval gates into Codex without Gluxer model spend.",
   "author": {
     "name": "Gluxer"
   },
@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Gluxer",
     "shortDescription": "Product understanding inside Codex.",
-    "longDescription": "Gluxer brings product discovery, product-map and wireframe generation contracts, visual review, verified feedback, and explicit approval gates into Codex before implementation. Codex renders; Gluxer's Design Recipe, product-evidence selection, and semantic gates guarantee a product-grounded quality floor—not pixel parity—without Gluxer model spend.",
+    "longDescription": "Gluxer brings product discovery, product-map and wireframe generation contracts, visual review, feedback, and explicit approval gates into Codex before implementation. The host reasons from Gluxer's product context and design guidance. Deterministic checks protect integrity and explicit behavior; visual quality needs rendered review and human judgment, without Gluxer model spend.",
     "developerName": "Gluxer",
     "category": "Productivity",
     "capabilities": [

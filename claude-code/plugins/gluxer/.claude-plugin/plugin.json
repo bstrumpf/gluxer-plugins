@@ -1,7 +1,7 @@
 {
   "name": "gluxer",
-  "description": "Bring Gluxer product discovery, host-rendered wireframes with a product-grounded semantic quality floor, visual review, and approval gates into Claude Code without Gluxer model spend.",
-  "version": "0.1.34",
+  "description": "Bring Gluxer product discovery, host-rendered product wireframes, visual review, and approval gates into Claude Code without Gluxer model spend.",
+  "version": "0.1.36",
   "author": {
     "name": "Gluxer"
   },
