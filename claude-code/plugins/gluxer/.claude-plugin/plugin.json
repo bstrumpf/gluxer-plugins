@@ -1,7 +1,7 @@
 {
   "name": "gluxer",
   "description": "Bring Gluxer product discovery, host-rendered product wireframes, visual review, and approval gates into Claude Code without Gluxer model spend.",
-  "version": "0.1.39",
+  "version": "0.1.40",
   "author": {
     "name": "Gluxer"
   },

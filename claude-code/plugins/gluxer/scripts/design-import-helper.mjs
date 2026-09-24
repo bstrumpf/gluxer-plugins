@@ -9745,7 +9745,7 @@ var require_lib3 = __commonJS({
 });
 
 // src/mcp/plugin-version.ts
-var GLUXER_PLUGIN_VERSION = "0.1.39";
+var GLUXER_PLUGIN_VERSION = "0.1.40";
 
 // scripts/design-import-host-helper.ts
 var import_jszip3 = __toESM(require_lib3());
@@ -9769,7 +9769,7 @@ function lengthPrefixed(value) {
   return `${byteLength(value)}:${value}`;
 }
 function assertManifestAssets(assets) {
-  if (assets.length < 1 || assets.length > 42) {
+  if (assets.length < 1 || assets.length > 128) {
     throw new Error("Invalid design import manifest asset authority");
   }
   const digest2 = /^[0-9a-f]{64}$/;
