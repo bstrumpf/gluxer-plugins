@@ -9745,7 +9745,7 @@ var require_lib3 = __commonJS({
 });
 
 // src/mcp/plugin-version.ts
-var GLUXER_PLUGIN_VERSION = "0.1.40";
+var GLUXER_PLUGIN_VERSION = "0.1.41";
 
 // scripts/design-import-host-helper.ts
 var import_jszip3 = __toESM(require_lib3());
